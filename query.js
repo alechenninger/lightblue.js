@@ -15,7 +15,7 @@ QueryExpression.prototype.or = function(expression) {
   return new OrExpression(this, expression);
 };
 
-QueryExpression.prototype.asJson = function() {
+QueryExpression.prototype.toJSON = function() {
   return this.json;
 };
 
