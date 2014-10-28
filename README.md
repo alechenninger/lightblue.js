@@ -22,10 +22,10 @@ var find = client.find({
   // Query builder
   query: field("username").equalTo("bob")
     .or(field("firstName").equalTo(field("username"))
-      .and(field("age").greaterThan(4))),
+      .and(field("age").greaterThan(4))).json,
 
   // No projection builder yet but it would be something like this:
-  projection: include("*").recursively()
+  projection: include("*").recursively().json
 });
 
 console.log(find.url);    // "http://my.lightblue.host.com/rest/data/find/User/1.0.0"
