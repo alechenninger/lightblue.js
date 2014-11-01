@@ -3,8 +3,8 @@
   "version": "0.1.0-SNAPSHOT",
   "description": "A lightblue client for javascript.",
   "scripts": {
-    "package": "browserify src/lightblue.js --standalone lightblue -d -p [minifyify --map dist/lightblue.map.json --output dist/lightblue.map.json] > dist/lightblue.min.js",
-    "watch": "watchify src/lightblue.js --standalone lightblue -d -p [minifyify --map dist/lightblue.map.json --output dist/lightblue.map.json] -o dist/lightblue.min.js --debug --verbose"
+    "package": "browserify lib/lightblue.js --standalone lightblue -d -p [minifyify --map dist/lightblue.map.json --output dist/lightblue.map.json] > dist/lightblue.min.js",
+    "watch": "watchify lib/lightblue.js --standalone lightblue -d -p [minifyify --map dist/lightblue.map.json --output dist/lightblue.map.json] -o dist/lightblue.min.js --debug --verbose"
   },
   "devDependencies":  {
     "browserify": "*",
