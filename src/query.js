@@ -1,3 +1,7 @@
+module.exports.field = function(name) {
+  return new Field(name);
+}
+
 /**
  * QueryExpression
  */
@@ -126,7 +130,3 @@ function ValueComparison(field, op, rvalue) {
 
 ValueComparison.prototype = new QueryExpression();
 ValueComparison.prototype.constructor = ValueComparison;
-
-function field(name) {
-  return new Field(name);
-}

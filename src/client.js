@@ -1,3 +1,5 @@
+module.exports = LightblueClient;
+
 function LightblueClient(host) {
   this.host = host;
 }
