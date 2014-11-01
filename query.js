@@ -30,7 +30,7 @@ function NaryLogicalExpression(op, expressions) {
     var json = {};
     
     json[op] = expressions.map(function (e) { 
-      return e.asJson(); 
+      return e.toJSON(); 
     });
   }
 
