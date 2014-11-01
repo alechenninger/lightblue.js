@@ -1,0 +1,11 @@
+{
+  "name": "lightblue-js",
+  "version": "0.1.0-SNAPSHOT",
+  "description": "A lightblue client for javascript.",
+  "scripts": {
+    "package": "browserify src/lightblue.js > dist/lightblue.js"
+  },
+  "devDependencies":  {
+    "browserify": "*"
+  }
+}
