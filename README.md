@@ -8,6 +8,12 @@ Conceivably one day useful for:
 
 At the moment this is really just a rough sketch of an idea and will change drastically.
 
+# Install
+
+`bower install lightblue.js --save`
+
+Or clone this repo and link to dist/lightblue.min.js.
+
 # Usage
 
 It does still sort of work! It won't actually make any requests, but gives you an API for building the key components of the request: the HTTP method, the URL, and the request body. The idea is this information could then be used easily with either XMLHttpRequest, jQuery.ajax, Angular's $http service, or a Node.JS HTTP client. All it takes is a little glue code to tie the necessary components with one of the aforementioned common AJAX mechanisms.
