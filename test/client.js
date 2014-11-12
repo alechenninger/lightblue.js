@@ -12,6 +12,15 @@ describe("lightblue REST client", function() {
       expect(findRequest.url).to.match(new RegExp("^myhost.com/rest/data/find/myEntity/myVersion/?$"));
     });
 
+    it("should construct urls like ${host}/data/find/${entity} when version omitted", function () {
+      var body = validFindBody({entity: "myEntity"});
+      delete body.version;
+
+      var findRequest = client("myhost.com/rest").find(body);
+
+      expect(findRequest.url).to.match(new RegExp("^myhost.com/rest/data/find/myEntity/?$"));
+    });
+
     it("should use POST", function() {
       var findRequest = client("myhost.com/rest").find(validFindBody());
 
@@ -29,13 +38,22 @@ describe("lightblue REST client", function() {
   });
 
   describe("insert", function() {
-    it("should construct urls like ${host/data/${entity}/${version}", function() {
+    it("should construct urls like ${host}/data/${entity}/${version}", function() {
       var insertRequest = client("myhost.com/rest").insert(validInsertBody({
         entity: "myEntity",
         version: "1.2.0"
       }));
 
       expect(insertRequest.url).to.match(new RegExp("^myhost.com/rest/data/myEntity/1.2.0/?$"));
+    });
+
+    it("should construct urls like ${host}/data/${entity} when version omitted", function () {
+      var body = validInsertBody({entity: "myEntity"});
+      delete body.version;
+
+      var insertRequest = client("myhost.com/rest").insert(body);
+
+      expect(insertRequest.url).to.match(new RegExp("^myhost.com/rest/data/myEntity/?$"));
     });
 
     it("should use PUT", function() {
@@ -64,6 +82,15 @@ describe("lightblue REST client", function() {
       expect(updateRequest.url).to.match(new RegExp("^myhost.com/rest/data/update/myEntity/1.2.0/?$"));
     });
 
+    it("should construct urls like ${host}/data/update/${entity} when version omitted", function () {
+      var body = validUpdateBody({entity: "myEntity"});
+      delete body.version;
+
+      var updateRequest = client("myhost.com/rest").update(body);
+
+      expect(updateRequest.url).to.match(new RegExp("^myhost.com/rest/data/update/myEntity/?$"));
+    });
+
     it("should use POST", function() {
       var updateRequest = client("myhost.com").update(validUpdateBody());
 
@@ -80,14 +107,23 @@ describe("lightblue REST client", function() {
     });
   });
 
-  describe("delete", function() {
-    it("should construct urls like ${host/data/save/${entity}/${version}", function() {
+  describe("save", function() {
+    it("should construct urls like ${host}/data/save/${entity}/${version}", function() {
       var saveRequest = client("myhost.com/rest").save(validSaveBody({
         entity: "myEntity",
         version: "1.2.0"
       }));
 
       expect(saveRequest.url).to.match(new RegExp("^myhost.com/rest/data/save/myEntity/1.2.0/?$"));
+    });
+
+    it("should construct urls like ${host}/data/save/${entity} when version omitted", function () {
+      var body = validSaveBody({entity: "myEntity"});
+      delete body.version;
+
+      var saveRequest = client("myhost.com/rest").save(body);
+
+      expect(saveRequest.url).to.match(new RegExp("^myhost.com/rest/data/save/myEntity/?$"));
     });
 
     it("should use POST", function() {
@@ -114,6 +150,15 @@ describe("lightblue REST client", function() {
       }));
 
       expect(deleteRequest.url).to.match(new RegExp("^myhost.com/rest/data/delete/myEntity/1.2.0/?$"));
+    });
+
+    it("should construct urls like ${host}/data/delete/${entity} when version omitted", function () {
+      var body = validDeleteBody({entity: "myEntity"});
+      delete body.version;
+
+      var deleteRequest = client("myhost.com/rest").delete(body);
+
+      expect(deleteRequest.url).to.match(new RegExp("^myhost.com/rest/data/delete/myEntity/?$"));
     });
 
     it("should use POST", function() {
