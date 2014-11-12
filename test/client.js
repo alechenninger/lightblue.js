@@ -13,8 +13,20 @@ describe("lightblue REST client", function() {
     });
 
     it("should construct urls like ${host}/data/find/${entity} when version omitted", function () {
-      var body = validFindBody({entity: "myEntity"});
+      var body = validFindBody({
+        entity: "myEntity"});
       delete body.version;
+
+      var findRequest = client("myhost.com/rest").find(body);
+
+      expect(findRequest.url).to.match(new RegExp("^myhost.com/rest/data/find/myEntity/?$"));
+    });
+
+    it("should construct urls like ${host}/data/find/${entity} when version is empty string", function () {
+      var body = validFindBody({
+        entity: "myEntity",
+        version: ""
+      });
 
       var findRequest = client("myhost.com/rest").find(body);
 
@@ -56,6 +68,17 @@ describe("lightblue REST client", function() {
       expect(insertRequest.url).to.match(new RegExp("^myhost.com/rest/data/myEntity/?$"));
     });
 
+    it("should construct urls like ${host}/data/${entity} when version is empty string", function () {
+      var body = validInsertBody({
+        entity: "myEntity",
+        version: ""
+      });
+
+      var insertRequest = client("myhost.com/rest").insert(body);
+
+      expect(insertRequest.url).to.match(new RegExp("^myhost.com/rest/data/myEntity/?$"));
+    });
+
     it("should use PUT", function() {
       var insertRequest = client("myhost.com").insert(validInsertBody());
 
@@ -85,6 +108,17 @@ describe("lightblue REST client", function() {
     it("should construct urls like ${host}/data/update/${entity} when version omitted", function () {
       var body = validUpdateBody({entity: "myEntity"});
       delete body.version;
+
+      var updateRequest = client("myhost.com/rest").update(body);
+
+      expect(updateRequest.url).to.match(new RegExp("^myhost.com/rest/data/update/myEntity/?$"));
+    });
+
+    it("should construct urls like ${host}/data/update/${entity} when version is empty string", function () {
+      var body = validUpdateBody({
+        entity: "myEntity",
+        version: ""
+      });
 
       var updateRequest = client("myhost.com/rest").update(body);
 
@@ -126,6 +160,17 @@ describe("lightblue REST client", function() {
       expect(saveRequest.url).to.match(new RegExp("^myhost.com/rest/data/save/myEntity/?$"));
     });
 
+    it("should construct urls like ${host}/data/save/${entity} when version is empty string", function () {
+      var body = validSaveBody({
+        entity: "myEntity",
+        version: ""
+      });
+
+      var saveRequest = client("myhost.com/rest").save(body);
+
+      expect(saveRequest.url).to.match(new RegExp("^myhost.com/rest/data/save/myEntity/?$"));
+    });
+
     it("should use POST", function() {
       var saveRequest = client("myhost.com").save(validSaveBody());
 
@@ -161,6 +206,17 @@ describe("lightblue REST client", function() {
       expect(deleteRequest.url).to.match(new RegExp("^myhost.com/rest/data/delete/myEntity/?$"));
     });
 
+    it("should construct urls like ${host}/data/delete/${entity} when version is empty string", function () {
+      var body = validDeleteBody({
+        entity: "myEntity",
+        version: ""
+      });
+
+      var deleteRequest = client("myhost.com/rest").delete(body);
+
+      expect(deleteRequest.url).to.match(new RegExp("^myhost.com/rest/data/delete/myEntity/?$"));
+    });
+
     it("should use POST", function() {
       var deleteRequest = client("myhost.com").delete(validDeleteBody());
 
@@ -183,10 +239,10 @@ function validFindBody(edit) {
   edit = edit || {};
 
   return {
-    entity: edit.entity || "bob",
-    version: edit.version || "1.0",
-    query: edit.query || { field: "name", op: "$eq", "rvalue": "Bob" },
-    projection: edit.projection || { include: "*" }
+    entity: ifDefined(edit.entity, "user"),
+    version: ifDefined(edit.version, "1.0"),
+    query: ifDefined(edit.query, { field: "name", op: "$eq", "rvalue": "Bob" }),
+    projection: ifDefined(edit.projection, { include: "*" })
   };
 }
 
@@ -194,12 +250,12 @@ function validInsertBody(edit) {
   edit = edit || {};
 
   return {
-    entity: edit.entity || "user",
-    version: edit.version || "1.0",
-    data: edit.data || [{
+    entity: ifDefined(edit.entity, "user"),
+    version: ifDefined(edit.version, "1.0"),
+    data: ifDefined(edit.data, [{
       name: "bob"
-    }],
-    projection: edit.projection || { include: "*" }
+    }]),
+    projection: ifDefined(edit.projection, { include: "*" })
   };
 }
 
@@ -207,15 +263,15 @@ function validUpdateBody(edit) {
   edit = edit || {};
 
   return {
-    entity: edit.entity || "user",
-    version: edit.version || "1.0",
-    query: edit.query || { field: "name", op: "$eq", "rvalue": "Bob" },
-    update: edit.update || {
+    entity: ifDefined(edit.entity, "user"),
+    version: ifDefined(edit.version, "1.0"),
+    query: ifDefined(edit.query, { field: "name", op: "$eq", "rvalue": "Bob" }),
+    update: ifDefined(edit.update, {
       $set: {
         name: "Jim"
       }
-    },
-    projection: edit.projection || { include: "*" }
+    }),
+    projection: ifDefined(edit.projection, { include: "*" })
   };
 }
 
@@ -223,13 +279,13 @@ function validSaveBody(edit) {
   edit = edit || {};
 
   return {
-    entity: edit.entity || "user",
-    version: edit.version || "1.0",
-    data: edit.data || [{
+    entity: ifDefined(edit.entity, "user"),
+    version: ifDefined(edit.version, "1.0"),
+    data: ifDefined(edit.data, [{
       name: "bob"
-    }],
-    upsert: edit.upsert || true,
-    projection: edit.projection || { include: "*" }
+    }]),
+    upsert: ifDefined(edit.upsert, true),
+    projection: ifDefined(edit.projection, { include: "*" })
   };
 }
 
@@ -237,8 +293,12 @@ function validDeleteBody(edit) {
   edit = edit || {};
 
   return {
-    entity: edit.entity || "user",
-    version: edit.version || "1.0",
-    query: edit.query || { field: "name", op: "$eq", "rvalue": "Bob" }
+    entity: ifDefined(edit.entity, "user"),
+    version: ifDefined(edit.version, "1.0"),
+    query: ifDefined(edit.query, { field: "name", op: "$eq", "rvalue": "Bob" })
   };
+}
+
+function ifDefined(use, otherwise) {
+  return (typeof use !== "undefined") ? use : otherwise;
 }
