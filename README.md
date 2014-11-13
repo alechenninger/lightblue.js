@@ -20,51 +20,67 @@ It does still sort of work! It won't actually make any requests, but gives you a
 
 Use browserify `require` or commonjs `define`, or just include dist/lightblue.min.js and use the namespace `lightblue`.
 
-```javascript
-// In html: <script src="lightblue.min.js"></script>
+Imports: 
 
-var client = lightblue.client("http://my.lightblue.host.com/rest");
+```javascript
+// Plain old HTML
+<script src="lightblue.min.js"></script>
+
+// NodeJS or Browserify
+var lightblue = require("./lightblue.min.js");
+
+// CommonJS and RequireJS work too but I don't have an example
+```
+
+Usage:
+
+```javascript
+// Assumes /data and /metadata for data and metadata service, but you can override
+var client = lightblue.getClient("http://my.lightblue.host.com/rest"); 
 var field = lightblue.field;
 
-var find = client.find({
+var find = client.data.find({
   entity: "User",
   version: "1.0.0",
-
   // Query builder
   query: field("username").equalTo("bob")
     .or(field("firstName").equalTo(field("username"))
       .and(field("age").greaterThan(4))).toJSON(),
-
   // No projection builder yet but it would be something like this:
   projection: include("*").recursively().toJSON()
 });
 
-console.log(find.url);    // "http://my.lightblue.host.com/rest/data/find/User/1.0.0"
-console.log(find.method); // "post"
-
-JSON.stringify(find.data, null, "  ");
-
-// "{
-//   "$or": [
-//     {
-//       "field": "username",
-//       "op": "$eq",
-//       "rvalue": "bob"
-//     },
-//     {
-//       "$and": [
-//         {
-//           "field": "firstName",
-//           "op": "$eq",
-//           "rfield": "username"
-//         },
-//         {
-//           "field": "age",
-//           "op": "$gt",
-//           "rvalue": 4
-//         }
-//       ]
-//     }
-//   ]
-// }"
+assertEquals("http://my.lightblue.host.com/rest/data/find/User/1.0.0", find.url);
+assertEquals("post", find.method);
+assertEquals({
+   objectType: "User",
+   version: "1.0.0",
+   query: {
+     $or: [
+       {
+         field: "username",
+         op: "$eq",
+         rvalue": "bob"
+       },
+       {
+         $and: [
+           {
+             field: "firstName",
+             op: "$eq",
+             rfield: "username"
+           },
+           {
+             field: "age",
+             op: "$gt",
+             rvalue: 4
+           }
+         ]
+       }
+    ]
+  },
+  projection: {
+    field: "*",
+    recursive: true
+  }
+ }, find.body);
 ```
