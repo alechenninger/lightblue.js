@@ -35,14 +35,15 @@ var lightblue = require("./lightblue.min.js");
 ## Construct a find request:
 
 ```javascript
-// Assumes /data and /metadata for data and metadata service, but you can override
+// Assumes /data and /metadata for data and metadata services respectively, 
+// but you can override.
 var client = lightblue.getClient("http://my.lightblue.host.com/rest"); 
 var field = lightblue.field;
 
 var find = client.data.find({
   entity: "User",
   version: "1.0.0",
-  // Query builder
+  // Query builder, or just pass a query string
   query: field("username").equalTo("bob")
     .or(field("firstName").equalTo(field("username"))
       .and(field("age").greaterThan(4))).toJSON(),
