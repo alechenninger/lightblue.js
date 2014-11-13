@@ -20,7 +20,7 @@ It does still sort of work! It won't actually make any requests, but gives you a
 
 Use browserify `require` or commonjs `define`, or just include dist/lightblue.min.js and use the namespace `lightblue`.
 
-Imports: 
+## Imports: 
 
 ```javascript
 // Plain old HTML
@@ -32,7 +32,7 @@ var lightblue = require("./lightblue.min.js");
 // CommonJS and RequireJS work too but I don't have an example
 ```
 
-Usage:
+## Construct a find request:
 
 ```javascript
 // Assumes /data and /metadata for data and metadata service, but you can override
