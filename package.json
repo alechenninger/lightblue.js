@@ -1,6 +1,6 @@
 {
   "name": "lightblue.js",
-  "version": "0.0.4",
+  "version": "0.1.0-SNAPSHOT",
   "description": "A lightblue client for javascript.",
   "scripts": {
     "package": "browserify lib/lightblue.js --standalone lightblue -d -p [minifyify --map dist/lightblue.map.json --output dist/lightblue.map.json] > dist/lightblue.min.js",
