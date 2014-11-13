@@ -63,7 +63,7 @@ assertEquals({
        {
          field: "username",
          op: "$eq",
-         rvalue": "bob"
+         rvalue: "bob"
        },
        {
          $and: [
