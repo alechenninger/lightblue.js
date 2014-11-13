@@ -1,10 +1,10 @@
 {
   "name": "lightblue.js",
-  "version": "0.1.0-SNAPSHOT",
+  "version": "0.1.0",
   "description": "A lightblue client for javascript.",
   "scripts": {
     "package": "browserify lib/lightblue.js --standalone lightblue -d -p [minifyify --map dist/lightblue.map.json --output dist/lightblue.map.json] > dist/lightblue.min.js",
-    "watch": "watchify lib/lightblue.js --standalone lightblue -d -p [minifyify --map dist/lightblue.map.json --output dist/lightblue.map.json] -o dist/lightblue.min.js --debug --verbose",
+    "watch": "watchify lib/lightblue.js --standalone lightblue -d -p [minifyify --map dist/lightblue.map.json --output dist/lightblue.map.json] -o dist/lightblue.min.js",
     "test": "mocha test/*",
     "tdd": "mocha -w test/*"
   },
