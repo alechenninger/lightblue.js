@@ -11,7 +11,9 @@ At the moment this is really just a rough sketch of an idea and will change dras
 # Install
 
 `bower install lightblue.js --save`
+
 `npm install lightblue.js --save`
+
 `git clone https://github.com/alechenninger/lightblue.js.git`
 
 # Usage
