@@ -5,7 +5,7 @@
     "Alec Henninger <ahenning@redhat.com>"
   ],
   "description": "A lightblue client for javascript.",
-  "main": "dist/lightblue.min.js",
+  "main": ["dist/lightblue.min.js", "dist/lightblue.map.json"],
   "moduleType": [
     "amd",
     "globals",
