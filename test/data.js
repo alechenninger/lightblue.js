@@ -80,6 +80,15 @@ describe("LightblueDataClient", function() {
       var findRequest = client("myhost.com").find(config);
       expect(findRequest.body).to.deep.equal(expectedBody);
     });
+
+    it("should allow expressing range as an object with from and to properties", function() {
+      var findRequest = client("myhost.com").find(validFindConfig({
+        range: {from: 1, to: 10}
+      }));
+
+      expect(findRequest.body.range[0]).to.equal(1);
+      expect(findRequest.body.range[1]).to.equal(10);
+    });
   });
 
   describe("insert", function() {
