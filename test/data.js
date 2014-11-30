@@ -1,5 +1,5 @@
-var expect = require("chai").expect,
-    client = require("../lib/lightblue").getDataClient;
+var expect = require("chai").expect;
+var client = require("../lib/lightblue").getDataClient;
 
 describe("LightblueDataClient", function() {
   describe("find", function() {
