@@ -48,9 +48,9 @@ var find = client.data.find({
   // Query builder, or just pass a query string
   query: field("username").equalTo("bob")
     .or(field("firstName").equalTo(field("username"))
-      .and(field("age").greaterThan(4))).toJSON(),
+      .and(field("age").greaterThan(4))),
   // No projection builder yet but it would be something like this:
-  projection: include("*").recursively().toJSON()
+  projection: include("*").recursively()
 });
 
 assertEquals("http://my.lightblue.host.com/rest/data/find/User/1.0.0", find.url);
