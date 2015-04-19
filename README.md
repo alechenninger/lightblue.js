@@ -2,11 +2,9 @@
 
 A [lightblue](https://github.com/lightblue-platform) client written in Javascript.
 
-Conceivably one day useful for:
+Write...
 - Node.JS apps talking to a Lightblue REST service
 - Client side apps communicating with a server that forwards requests to a Lightblue REST service
-
-At the moment this is really just a rough sketch of an idea and will change drastically.
 
 # Install
 
@@ -18,18 +16,20 @@ At the moment this is really just a rough sketch of an idea and will change dras
 
 # Usage
 
-Use browserify `require` or commonjs `define`, or just include dist/lightblue.min.js and use the namespace `lightblue`.
+Use browserify `require` or requirejs `define`, or just include dist/lightblue.min.js and use the namespace `lightblue`.
+
+For frontend angular applications, use the `lightblue` module (TODO: document).
 
 ## Imports: 
 
 ```javascript
-// Plain old HTML
+// No module framework (use window.lightblue)
 <script src="lightblue.min.js"></script>
 
-// NodeJS or Browserify
+// NodeJS or Browserify or CommonJS
 var lightblue = require("./lightblue.min.js");
 
-// CommonJS and RequireJS work too but I don't have an example
+// RequireJS works too but I don't have an example
 ```
 
 ## Construct a find request:
