@@ -1,12 +1,19 @@
 {
   "name": "lightblue.js",
-  "version": "0.4.1",
+  "version": "0.5.0-alpha",
   "description": "A lightblue client for javascript.",
+  "repository": {
+      "type": "git",
+      "url": "https://github.com/alechenninger/lightblue.js.git"
+  },
   "scripts": {
     "package": "browserify lib/lightblue.js --standalone lightblue -d -p [minifyify --map lightblue.map.json --output dist/lightblue.map.json] > dist/lightblue.min.js",
     "watch": "watchify lib/lightblue.js --standalone lightblue -d -p [minifyify --map lightblue.map.json --output dist/lightblue.map.json] -o dist/lightblue.min.js",
     "test": "mocha test/*",
     "tdd": "mocha -w test/*"
+  },
+  "dependencies": {
+    "q": "^1.0.0"  
   },
   "devDependencies": {
     "browserify": "^6.2.0",

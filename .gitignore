@@ -2,3 +2,5 @@ node_modules/
 *.sublime*
 sketch
 test.html
+.c9/
+*.log

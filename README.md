@@ -18,8 +18,6 @@ At the moment this is really just a rough sketch of an idea and will change dras
 
 # Usage
 
-It does still sort of work! It won't actually make any requests, but gives you an API for building the key components of the request: the HTTP method, the URL, and the request body. The idea is this information could then be used easily with either XMLHttpRequest, jQuery.ajax, Angular's $http service, or a Node.JS HTTP client. All it takes is a little glue code to tie the necessary components with one of the aforementioned common AJAX mechanisms.
-
 Use browserify `require` or commonjs `define`, or just include dist/lightblue.min.js and use the namespace `lightblue`.
 
 ## Imports: 
@@ -51,39 +49,7 @@ var find = client.data.find({
       .and(field("age").greaterThan(4))),
   // No projection builder yet but it would be something like this:
   projection: include("*").recursively()
-});
+})
+.then(console.log);
 
-assertEquals("http://my.lightblue.host.com/rest/data/find/User/1.0.0", find.url);
-assertEquals("post", find.method);
-assertEquals({
-   objectType: "User",
-   version: "1.0.0",
-   query: {
-     $or: [
-       {
-         field: "username",
-         op: "$eq",
-         rvalue: "bob"
-       },
-       {
-         $and: [
-           {
-             field: "firstName",
-             op: "$eq",
-             rfield: "username"
-           },
-           {
-             field: "age",
-             op: "$gt",
-             rvalue: 4
-           }
-         ]
-       }
-    ]
-  },
-  projection: {
-    field: "*",
-    recursive: true
-  }
- }, find.body);
 ```
