@@ -10,7 +10,7 @@
   "scripts": {
     "bundle": "browserify lib/lightblue.js --standalone lightblue -d -p [minifyify --map lightblue.map.json --output dist/lightblue.map.json] > dist/lightblue.min.js",
     "test": "mocha",
-    "coveralls": "mocha --require blanket --reporter mocha-lcov-reporter | coveralls",
+    "coveralls": "NODE_ENV=test mocha --require blanket --reporter mocha-lcov-reporter | coveralls",
     "tdd": "mocha -w"
   },
   "config": {
