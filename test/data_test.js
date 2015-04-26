@@ -1,25 +1,35 @@
+/* globals describe it */
 var expect = require("chai").expect;
-var client = require("../lib/lightblue").getDataClient;
+var getDataClient = require("../lib/lightblue").getDataClient;
 
 describe("LightblueDataClient", function() {
+  
+  // Captures request sent to execute(req)
+  var mockHttpClient = {
+    execute: function(request) {
+      this.request = request;
+    }
+  };
+  
+  var dataClient = getDataClient(mockHttpClient, "myhost.com");
+  
   describe("find", function() {
     it("should construct urls like ${host}/find/${entity}/${version}", function() {
-      var findRequest = client("myhost.com").find(validFindConfig({
+      dataClient.find(validFindConfig({
         entity: "myEntity",
         version: "myVersion"
       }));
 
-      expect(findRequest.url).to.match(new RegExp("^myhost.com/find/myEntity/myVersion/?$"));
+      expect(mockHttpClient.request.url).to.match(new RegExp("^myhost.com/find/myEntity/myVersion/?$"));
     });
 
     it("should construct urls like ${host}/find/${entity} when version is undefined", function () {
-      var config = validFindConfig({
-        entity: "myEntity"});
+      var config = validFindConfig({entity: "myEntity"});
       delete config.version;
 
-      var findRequest = client("myhost.com").find(config);
+      dataClient.find(config);
 
-      expect(findRequest.url).to.match(new RegExp("^myhost.com/find/myEntity/?$"));
+      expect(mockHttpClient.request.url).to.match(new RegExp("^myhost.com/find/myEntity/?$"));
     });
 
     it("should construct urls like ${host}/find/${entity} when version is empty string", function () {
@@ -28,15 +38,15 @@ describe("LightblueDataClient", function() {
         version: ""
       });
 
-      var findRequest = client("myhost.com").find(config);
+      dataClient.find(config);
 
-      expect(findRequest.url).to.match(new RegExp("^myhost.com/find/myEntity/?$"));
+      expect(mockHttpClient.request.url).to.match(new RegExp("^myhost.com/find/myEntity/?$"));
     });
 
     it("should use POST", function() {
-      var findRequest = client("myhost.com").find(validFindConfig());
+      dataClient.find(validFindConfig());
 
-      expect(findRequest.method).to.equal("post");
+      expect(mockHttpClient.request.method).to.equal("post");
     });
 
     it("should construct request body with objectType, version, query and projection", function() {
@@ -54,8 +64,9 @@ describe("LightblueDataClient", function() {
         projection: expectedBody.projection
       };
 
-      var findRequest = client("myhost.com").find(config);
-      expect(findRequest.body).to.deep.equal(expectedBody);
+      dataClient.find(config);
+      
+      expect(mockHttpClient.request.body).to.deep.equal(expectedBody);
     });
 
     it("should construct request body with objectType, version, query, projection, sort, and range", function() {
@@ -77,37 +88,38 @@ describe("LightblueDataClient", function() {
         range: expectedBody.range
       };
 
-      var findRequest = client("myhost.com").find(config);
-      expect(findRequest.body).to.deep.equal(expectedBody);
+      dataClient.find(config);
+      
+      expect(mockHttpClient.request.body).to.deep.equal(expectedBody);
     });
 
     it("should allow expressing range as an object with from and to properties", function() {
-      var findRequest = client("myhost.com").find(validFindConfig({
+      dataClient.find(validFindConfig({
         range: {from: 1, to: 10}
       }));
 
-      expect(findRequest.body.range[0]).to.equal(1);
-      expect(findRequest.body.range[1]).to.equal(10);
+      expect(mockHttpClient.request.body.range[0]).to.equal(1);
+      expect(mockHttpClient.request.body.range[1]).to.equal(10);
     });
   });
 
   describe("insert", function() {
     it("should construct urls like ${host}/insert/${entity}/${version}", function() {
-      var insertRequest = client("myhost.com").insert(validInsertConfig({
+      dataClient.insert(validInsertConfig({
         entity: "myEntity",
         version: "1.2.0"
       }));
 
-      expect(insertRequest.url).to.match(new RegExp("^myhost.com/insert/myEntity/1.2.0/?$"));
+      expect(mockHttpClient.request.url).to.match(new RegExp("^myhost.com/insert/myEntity/1.2.0/?$"));
     });
 
     it("should construct urls like ${host}/insert/${entity} when version is undefined", function () {
       var config = validInsertConfig({entity: "myEntity"});
       delete config.version;
 
-      var insertRequest = client("myhost.com").insert(config);
+      dataClient.insert(config);
 
-      expect(insertRequest.url).to.match(new RegExp("^myhost.com/insert/myEntity/?$"));
+      expect(mockHttpClient.request.url).to.match(new RegExp("^myhost.com/insert/myEntity/?$"));
     });
 
     it("should construct urls like ${host}/insert/${entity} when version is empty string", function () {
@@ -116,15 +128,15 @@ describe("LightblueDataClient", function() {
         version: ""
       });
 
-      var insertRequest = client("myhost.com").insert(config);
+      dataClient.insert(config);
 
-      expect(insertRequest.url).to.match(new RegExp("^myhost.com/insert/myEntity/?$"));
+      expect(mockHttpClient.request.url).to.match(new RegExp("^myhost.com/insert/myEntity/?$"));
     });
 
     it("should use PUT", function() {
-      var insertRequest = client("myhost.com").insert(validInsertConfig());
+      dataClient.insert(validInsertConfig());
 
-      expect(insertRequest.method).to.equal("put");
+      expect(mockHttpClient.request.method).to.equal("put");
     });
 
     it("should include request data", function() {
@@ -142,29 +154,29 @@ describe("LightblueDataClient", function() {
         projection: expectedBody.projection
       };
 
-      var insertRequest = client("myhost.com").insert(config);
+      dataClient.insert(config);
 
-      expect(insertRequest.body).to.deep.equal(expectedBody);
+      expect(mockHttpClient.request.body).to.deep.equal(expectedBody);
     });
   });
 
   describe("update", function() {
     it("should construct urls like ${host}/update/${entity}/${version}", function() {
-      var updateRequest = client("myhost.com").update(validUpdateConfig({
+      dataClient.update(validUpdateConfig({
         entity: "myEntity",
         version: "1.2.0"
       }));
 
-      expect(updateRequest.url).to.match(new RegExp("^myhost.com/update/myEntity/1.2.0/?$"));
+      expect(mockHttpClient.request.url).to.match(new RegExp("^myhost.com/update/myEntity/1.2.0/?$"));
     });
 
     it("should construct urls like ${host}/update/${entity} when version is undefined", function () {
       var config = validUpdateConfig({entity: "myEntity"});
       delete config.version;
 
-      var updateRequest = client("myhost.com").update(config);
+      dataClient.update(config);
 
-      expect(updateRequest.url).to.match(new RegExp("^myhost.com/update/myEntity/?$"));
+      expect(mockHttpClient.request.url).to.match(new RegExp("^myhost.com/update/myEntity/?$"));
     });
 
     it("should construct urls like ${host}/update/${entity} when version is empty string", function () {
@@ -173,15 +185,15 @@ describe("LightblueDataClient", function() {
         version: ""
       });
 
-      var updateRequest = client("myhost.com").update(config);
+      dataClient.update(config);
 
-      expect(updateRequest.url).to.match(new RegExp("^myhost.com/update/myEntity/?$"));
+      expect(mockHttpClient.request.url).to.match(new RegExp("^myhost.com/update/myEntity/?$"));
     });
 
     it("should use POST", function() {
-      var updateRequest = client("myhost.com").update(validUpdateConfig());
+      dataClient.update(validUpdateConfig());
 
-      expect(updateRequest.method).to.equal("post");
+      expect(mockHttpClient.request.method).to.equal("post");
     });
 
     it("should include request data", function() {
@@ -201,29 +213,29 @@ describe("LightblueDataClient", function() {
         projection: expectedBody.projection
       };
 
-      var updateRequest = client("myhost.com").update(config);
+      dataClient.update(config);
 
-      expect(updateRequest.body).to.deep.equal(expectedBody);
+      expect(mockHttpClient.request.body).to.deep.equal(expectedBody);
     });
   });
 
   describe("save", function() {
     it("should construct urls like ${host}/save/${entity}/${version}", function() {
-      var saveRequest = client("myhost.com").save(validSaveConfig({
+      dataClient.save(validSaveConfig({
         entity: "myEntity",
         version: "1.2.0"
       }));
 
-      expect(saveRequest.url).to.match(new RegExp("^myhost.com/save/myEntity/1.2.0/?$"));
+      expect(mockHttpClient.request.url).to.match(new RegExp("^myhost.com/save/myEntity/1.2.0/?$"));
     });
 
     it("should construct urls like ${host}/save/${entity} when version is undefined", function () {
       var config = validSaveConfig({entity: "myEntity"});
       delete config.version;
 
-      var saveRequest = client("myhost.com").save(config);
+      dataClient.save(config);
 
-      expect(saveRequest.url).to.match(new RegExp("^myhost.com/save/myEntity/?$"));
+      expect(mockHttpClient.request.url).to.match(new RegExp("^myhost.com/save/myEntity/?$"));
     });
 
     it("should construct urls like ${host}/save/${entity} when version is empty string", function () {
@@ -232,15 +244,15 @@ describe("LightblueDataClient", function() {
         version: ""
       });
 
-      var saveRequest = client("myhost.com").save(config);
+      dataClient.save(config);
 
-      expect(saveRequest.url).to.match(new RegExp("^myhost.com/save/myEntity/?$"));
+      expect(mockHttpClient.request.url).to.match(new RegExp("^myhost.com/save/myEntity/?$"));
     });
 
     it("should use POST", function() {
-      var saveRequest = client("myhost.com").save(validSaveConfig());
+      dataClient.save(validSaveConfig());
 
-      expect(saveRequest.method).to.equal("post");
+      expect(mockHttpClient.request.method).to.equal("post");
     });
 
     it("should include request data", function() {
@@ -260,29 +272,29 @@ describe("LightblueDataClient", function() {
         upsert: expectedBody.upsert
       };
 
-      var saveRequest = client("myhost.com").save(config);
+      dataClient.save(config);
 
-      expect(saveRequest.body).to.deep.equal(expectedBody);
+      expect(mockHttpClient.request.body).to.deep.equal(expectedBody);
     });
   });
 
   describe("delete", function() {
     it("should construct urls like ${host/data/delete/${entity}/${version}", function() {
-      var deleteRequest = client("myhost.com").delete(validDeleteConfig({
+      dataClient.delete(validDeleteConfig({
         entity: "myEntity",
         version: "1.2.0"
       }));
 
-      expect(deleteRequest.url).to.match(new RegExp("^myhost.com/delete/myEntity/1.2.0/?$"));
+      expect(mockHttpClient.request.url).to.match(new RegExp("^myhost.com/delete/myEntity/1.2.0/?$"));
     });
 
     it("should construct urls like ${host}/delete/${entity} when version is undefined", function () {
       var config = validDeleteConfig({entity: "myEntity"});
       delete config.version;
 
-      var deleteRequest = client("myhost.com").delete(config);
+      dataClient.delete(config);
 
-      expect(deleteRequest.url).to.match(new RegExp("^myhost.com/delete/myEntity/?$"));
+      expect(mockHttpClient.request.url).to.match(new RegExp("^myhost.com/delete/myEntity/?$"));
     });
 
     it("should construct urls like ${host}/delete/${entity} when version is empty string", function () {
@@ -291,15 +303,15 @@ describe("LightblueDataClient", function() {
         version: ""
       });
 
-      var deleteRequest = client("myhost.com").delete(config);
+      dataClient.delete(config);
 
-      expect(deleteRequest.url).to.match(new RegExp("^myhost.com/delete/myEntity/?$"));
+      expect(mockHttpClient.request.url).to.match(new RegExp("^myhost.com/delete/myEntity/?$"));
     });
 
     it("should use POST", function() {
-      var deleteRequest = client("myhost.com").delete(validDeleteConfig());
+      dataClient.delete(validDeleteConfig());
 
-      expect(deleteRequest.method).to.equal("post");
+      expect(mockHttpClient.request.method).to.equal("post");
     });
 
     it("should include request data", function() {
@@ -315,9 +327,9 @@ describe("LightblueDataClient", function() {
         query: expectedBody.query
       };
 
-      var deleteRequest = client("myhost.com").delete(config);
+      dataClient.delete(config);
 
-      expect(deleteRequest.body).to.deep.equal(expectedBody);
+      expect(mockHttpClient.request.body).to.deep.equal(expectedBody);
     });
   });
 
