@@ -4,3 +4,4 @@ sketch
 test.html
 .c9/
 *.log
+coverage/
