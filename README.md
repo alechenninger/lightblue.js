@@ -6,7 +6,7 @@ Write...
 - Node.JS apps talking to a Lightblue REST service
 - Client side apps communicating with a server that forwards requests to a Lightblue REST service
 
-# Install
+## Install
 
 `bower install lightblue.js --save`
 
@@ -14,29 +14,54 @@ Write...
 
 `git clone https://github.com/alechenninger/lightblue.js.git`
 
-# Usage
 
-Use browserify `require` or requirejs `define`, or just include dist/lightblue.min.js and use the namespace `lightblue`.
+## Imports
 
-For frontend angular applications, use the `lightblue` module (TODO: document).
-
-## Imports: 
+### Vanilla.js
 
 ```javascript
 // No module framework (use window.lightblue)
-<script src="lightblue.min.js"></script>
-
-// NodeJS or Browserify or CommonJS
-var lightblue = require("./lightblue.min.js");
-
-// RequireJS works too but I don't have an example
+<script src="lightblue.min.js" type="text/javascript"></script>
 ```
 
-## Construct a find request:
+### Browserify (CommonJS) or RequireJS (AMD)
+```js
+// commonjs
+var lightblue = require("lightblue");
+
+// asynchronous module definition (amd)
+require(["lightblue"], function(lightblue) {
+  ...
+}
+```
+
+### AngularJS
+Include `dist/ng.lightblue.min.js` for a "lightblue" angular module which 
+defines a `lightblueProvider` (and therefore a `lightblue` service).
+
+```js
+var app = angular.module("app", ["lightblue"]);
+
+app.config(["lightblueProvider", function(lightblueProvider) {
+  lightblueProvider.setHost("http://my.lightblue.com");
+}]);
+
+app.controller("ctrl", ["lightblue", function(lightblue) {
+  lightblue.data.find(...)
+      .then(...);
+}]);
+```
+
+**At the moment you will also need to include the global lightblue namespace 
+via standard "lightblue.min.js" to get query builder API and such. See issue #9.
+**
+
+## Construct a find request
 
 ```javascript
 // Assumes /data and /metadata for data and metadata services respectively, 
 // but you can override.
+// If you're using the angular module, the client is the `lightblue` service.
 var client = lightblue.getClient("http://my.lightblue.host.com/rest"); 
 var field = lightblue.field;
 
@@ -51,5 +76,4 @@ var find = client.data.find({
   projection: include("*").recursively()
 })
 .then(console.log);
-
 ```
