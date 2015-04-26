@@ -1,5 +1,5 @@
 /* globals describe it before */
-var NodeHttpClient = require("../lib/nodehttp.js").NodeHttpClient;
+var NodeHttpClient = require("../lib/nodehttp.js");
 var HttpRequest    = require("../lib/http.js").HttpRequest;
 var nock           = require("nock");
 var expect         = require("chai").expect;
