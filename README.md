@@ -1,4 +1,5 @@
 # lightblue.js
+[![Coverage Status](https://coveralls.io/repos/alechenninger/lightblue.js/badge.svg)](https://coveralls.io/r/alechenninger/lightblue.js)
 
 A [lightblue](https://github.com/lightblue-platform) client written in
 Javascript for frontend or Node.JS applications.
