@@ -8,6 +8,7 @@ describe("LightblueDataClient", function() {
   var mockHttpClient = {
     execute: function(request) {
       this.request = request;
+      return "response";
     }
   };
   
@@ -101,6 +102,12 @@ describe("LightblueDataClient", function() {
       expect(mockHttpClient.request.body.range[0]).to.equal(1);
       expect(mockHttpClient.request.body.range[1]).to.equal(10);
     });
+    
+    it("should return result of http client execute", function() {
+      var response = dataClient.find(validFindConfig());
+      
+      expect(response).to.equal("response");
+    });
   });
 
   describe("insert", function() {
@@ -157,6 +164,12 @@ describe("LightblueDataClient", function() {
       dataClient.insert(config);
 
       expect(mockHttpClient.request.body).to.deep.equal(expectedBody);
+    });
+    
+    it("should return result of http client execute", function() {
+      var response = dataClient.insert(validInsertConfig());
+      
+      expect(response).to.equal("response");
     });
   });
 
@@ -217,6 +230,12 @@ describe("LightblueDataClient", function() {
 
       expect(mockHttpClient.request.body).to.deep.equal(expectedBody);
     });
+    
+    it("should return result of http client execute", function() {
+      var response = dataClient.update(validUpdateConfig());
+      
+      expect(response).to.equal("response");
+    });
   });
 
   describe("save", function() {
@@ -276,6 +295,12 @@ describe("LightblueDataClient", function() {
 
       expect(mockHttpClient.request.body).to.deep.equal(expectedBody);
     });
+    
+    it("should return result of http client execute", function() {
+      var response = dataClient.save(validSaveConfig());
+      
+      expect(response).to.equal("response");
+    });
   });
 
   describe("delete", function() {
@@ -319,7 +344,7 @@ describe("LightblueDataClient", function() {
         objectType: "wizard",
         version: "1.0.0",
         query: {field: "name", op: "=", rvalue: "Voldemort"}
-      }
+      };
 
       var config = {
         entity: expectedBody.objectType,
@@ -331,8 +356,13 @@ describe("LightblueDataClient", function() {
 
       expect(mockHttpClient.request.body).to.deep.equal(expectedBody);
     });
+    
+    it("should return result of http client execute", function() {
+      var response = dataClient.delete(validDeleteConfig());
+      
+      expect(response).to.equal("response");
+    });
   });
-
 });
 
 function validFindConfig(edit) {
