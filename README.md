@@ -2,13 +2,11 @@
 
 A [lightblue](https://github.com/lightblue-platform) client written in Javascript.
 
-Conceivably one day useful for:
+Write...
 - Node.JS apps talking to a Lightblue REST service
 - Client side apps communicating with a server that forwards requests to a Lightblue REST service
 
-At the moment this is really just a rough sketch of an idea and will change drastically.
-
-# Install
+## Install
 
 `bower install lightblue.js --save`
 
@@ -16,30 +14,61 @@ At the moment this is really just a rough sketch of an idea and will change dras
 
 `git clone https://github.com/alechenninger/lightblue.js.git`
 
-# Usage
 
-It does still sort of work! It won't actually make any requests, but gives you an API for building the key components of the request: the HTTP method, the URL, and the request body. The idea is this information could then be used easily with either XMLHttpRequest, jQuery.ajax, Angular's $http service, or a Node.JS HTTP client. All it takes is a little glue code to tie the necessary components with one of the aforementioned common AJAX mechanisms.
+## Imports
 
-Use browserify `require` or commonjs `define`, or just include dist/lightblue.min.js and use the namespace `lightblue`.
-
-## Imports: 
+### Vanilla.js
 
 ```javascript
-// Plain old HTML
-<script src="lightblue.min.js"></script>
-
-// NodeJS or Browserify
-var lightblue = require("./lightblue.min.js");
-
-// CommonJS and RequireJS work too but I don't have an example
+// No module framework (use window.lightblue)
+<script src="lightblue.min.js" type="text/javascript"></script>
 ```
 
-## Construct a find request:
+### Browserify (CommonJS) or RequireJS (AMD)
 
-```javascript
+```js
+// commonjs
+var lightblue = require("lightblue");
+
+// asynchronous module definition (amd)
+require(["lightblue"], function(lightblue) {
+  ...
+});
+```
+
+Once you have a `lightblue` object, you can get a client:
+
+```js
 // Assumes /data and /metadata for data and metadata services respectively, 
 // but you can override.
 var client = lightblue.getClient("http://my.lightblue.host.com/rest"); 
+```
+
+### AngularJS
+If angular is detected, a "lightblue" module will be registered with a
+"lightblue" service as the client.
+
+```js
+var app = angular.module("app", ["lightblue"]);
+
+app.config(["lightblueProvider", function(lightblueProvider) {
+  lightblueProvider.setHost("http://my.lightblue.com");
+}]);
+
+app.controller("ctrl", ["lightblue", function(lightblueClient) {
+  lightblueClient.data.find(...)
+      .then(...);
+}]);
+```
+
+**At the moment you will also need to use the global "lightblue" namespace if 
+you want query builder API. So don't name your client variable `lightblue` 
+just yet. See 
+[issue #9](https://github.com/alechenninger/lightblue.js/issues/9).**
+
+## Construct a find request
+
+```javascript
 var field = lightblue.field;
 
 var find = client.data.find({
@@ -51,39 +80,6 @@ var find = client.data.find({
       .and(field("age").greaterThan(4))),
   // No projection builder yet but it would be something like this:
   projection: include("*").recursively()
-});
-
-assertEquals("http://my.lightblue.host.com/rest/data/find/User/1.0.0", find.url);
-assertEquals("post", find.method);
-assertEquals({
-   objectType: "User",
-   version: "1.0.0",
-   query: {
-     $or: [
-       {
-         field: "username",
-         op: "$eq",
-         rvalue: "bob"
-       },
-       {
-         $and: [
-           {
-             field: "firstName",
-             op: "$eq",
-             rfield: "username"
-           },
-           {
-             field: "age",
-             op: "$gt",
-             rvalue: 4
-           }
-         ]
-       }
-    ]
-  },
-  projection: {
-    field: "*",
-    recursive: true
-  }
- }, find.body);
+})
+.then(console.log);
 ```
