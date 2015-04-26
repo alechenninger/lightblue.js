@@ -25,6 +25,7 @@ Write...
 ```
 
 ### Browserify (CommonJS) or RequireJS (AMD)
+
 ```js
 // commonjs
 var lightblue = require("lightblue");
@@ -35,9 +36,17 @@ require(["lightblue"], function(lightblue) {
 });
 ```
 
+Once you have a `lightblue` object, you can get a client:
+
+```js
+// Assumes /data and /metadata for data and metadata services respectively, 
+// but you can override.
+var client = lightblue.getClient("http://my.lightblue.host.com/rest"); 
+```
+
 ### AngularJS
-Include `dist/ng.lightblue.min.js` for a "lightblue" angular module which 
-defines a `lightblueProvider` (and therefore a `lightblue` service).
+If angular is detected, a "lightblue" module will be registered with a
+"lightblue" service as the client.
 
 ```js
 var app = angular.module("app", ["lightblue"]);
@@ -46,23 +55,20 @@ app.config(["lightblueProvider", function(lightblueProvider) {
   lightblueProvider.setHost("http://my.lightblue.com");
 }]);
 
-app.controller("ctrl", ["lightblue", function(lightblue) {
-  lightblue.data.find(...)
+app.controller("ctrl", ["lightblue", function(lightblueClient) {
+  lightblueClient.data.find(...)
       .then(...);
 }]);
 ```
 
-**At the moment you will also need to include the global lightblue namespace 
-via standard "lightblue.min.js" to get query builder API and such. See 
+**At the moment you will also need to use the global "lightblue" namespace if 
+you want query builder API. So don't name your client variable `lightblue` 
+just yet. See 
 [issue #9](https://github.com/alechenninger/lightblue.js/issues/9).**
 
 ## Construct a find request
 
 ```javascript
-// Assumes /data and /metadata for data and metadata services respectively, 
-// but you can override.
-// If you're using the angular module, the client is the `lightblue` service.
-var client = lightblue.getClient("http://my.lightblue.host.com/rest"); 
 var field = lightblue.field;
 
 var find = client.data.find({

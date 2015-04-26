@@ -1,6 +1,6 @@
 /* globals describe it */
 var expect = require("chai").expect;
-var getDataClient = require("../lib/lightblue").getDataClient;
+var DataClient = require("../lib/data.js");
 
 describe("LightblueDataClient", function() {
   
@@ -12,7 +12,7 @@ describe("LightblueDataClient", function() {
     }
   };
   
-  var dataClient = getDataClient(mockHttpClient, "myhost.com");
+  var dataClient = new DataClient(mockHttpClient, "myhost.com");
   
   describe("find", function() {
     it("should construct urls like ${host}/find/${entity}/${version}", function() {

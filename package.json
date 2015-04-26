@@ -6,10 +6,9 @@
     "type": "git",
     "url": "https://github.com/alechenninger/lightblue.js.git"
   },
+  "main": "lib/lightblue.js",
   "scripts": {
-    "bundle_lightblue": "browserify lib/lightblue.js --standalone lightblue -d -p [minifyify --map lightblue.map.json --output dist/lightblue.map.json] > dist/lightblue.min.js",
-    "bundle_ng": "browserify lib/nglightblue.js  --standalone nglightblue -d -p [minifyify --map nglightblue.map.json --output dist/nglightblue.map.json] > dist/nglightblue.min.js",
-    "bundle": "npm run bundle_lightblue && npm run bundle_ng",
+    "bundle": "browserify lib/lightblue.js --standalone lightblue -d -p [minifyify --map lightblue.map.json --output dist/lightblue.map.json] > dist/lightblue.min.js",
     "test": "mocha test/*",
     "tdd": "mocha -w test/*"
   },
