@@ -1,10 +1,7 @@
 # lightblue.js
 
-A [lightblue](https://github.com/lightblue-platform) client written in Javascript.
-
-Write...
-- Node.JS apps talking to a Lightblue REST service
-- Client side apps communicating with a server that forwards requests to a Lightblue REST service
+A [lightblue](https://github.com/lightblue-platform) client written in
+Javascript for frontend or Node.JS applications.
 
 ## Install
 
