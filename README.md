@@ -32,7 +32,7 @@ var lightblue = require("lightblue");
 // asynchronous module definition (amd)
 require(["lightblue"], function(lightblue) {
   ...
-}
+});
 ```
 
 ### AngularJS
