@@ -53,8 +53,8 @@ app.controller("ctrl", ["lightblue", function(lightblue) {
 ```
 
 **At the moment you will also need to include the global lightblue namespace 
-via standard "lightblue.min.js" to get query builder API and such. See [issue 
-#9](/issues/9).**
+via standard "lightblue.min.js" to get query builder API and such. See 
+[issue #9](/issues/9).**
 
 ## Construct a find request
 
