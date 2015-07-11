@@ -80,5 +80,5 @@ var find = client.data.find({
   // No projection builder yet but it would be something like this:
   projection: include("*").recursively()
 })
-.then(console.log);
+.then(console.log.bind(console));
 ```
