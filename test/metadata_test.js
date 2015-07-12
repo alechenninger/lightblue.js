@@ -102,7 +102,7 @@ describe("LightblueMetadataClient", function() {
     it("should construct urls like ${host}/${entityName}/${version}", function() {
       metadataClient.getMetadata("foo", "1.2.3");
 
-      expect(mockHttpClient.request.url).to.match(new RegExp("^myhost.com/foo/1.2.3"));
+      expect(mockHttpClient.request.url).to.match(new RegExp("^myhost.com/foo/1.2.3/?$"));
     });
 
     it("should require name and version to be specified", function() {
@@ -138,13 +138,32 @@ describe("LightblueMetadataClient", function() {
   });
 
   describe("putMetadata", function() {
-    it("constructs urls like ${host}/${entityName}/${version} using name and version from entity info");
+    it("constructs urls like ${host}/${entityName}/${version} using name and version from schema", function() {
+      metadataClient.putMetadata(fooV1);
+      expect(mockHttpClient.request.url).to.match(new RegExp("^myhost.com/foo/1/?$"));
+    });
 
-    it("requires entity name and version in metadata");
+    it("requires entity name and version in metadata", function() {
+      expect(function() {
+        metadataClient.putMetadata(metadataMissingNameAndVersion);
+      }).to.throw(Error);
+    });
 
-    it("uses PUT");
+    it("requires entity name to match in entity info and schema", function() {
+      expect(function() {
+        metadataClient.putMetadata(mismatchedNameMetadata);
+      }).to.throw(Error);
+    });
 
-    it("returns result of httpclient execute");
+    it("uses PUT", function() {
+      metadataClient.putMetadata(fooV1);
+      expect(mockHttpClient.request.method).to.equal("put");
+    });
+
+    it("returns result of httpclient execute", function() {
+      var result = metadataClient.putMetadata(fooV1);
+      expect(result).to.equal("response");
+    });
   });
 
   describe("addSchema", function() {
@@ -230,6 +249,91 @@ describe("LightblueMetadataClient", function() {
   });
 });
 
-function ifDefined(it, otherwise) {
-  return (typeof it !== "undefined") ? it : otherwise;
-}
+var fooV1 = {
+  "entityInfo": {
+    "name": "foo",
+    "indexes": [
+      {
+        "name": null,
+        "unique": true,
+        "fields": [
+          {
+            "field": "_id",
+            "dir": "$asc"
+          }
+        ]
+      }
+    ],
+    "datastore": {
+      "database": "mongo",
+      "datasource": "mongo",
+      "collection": "foo",
+      "backend": "mongo"
+    }
+  },
+  "schema": {
+    "name": "foo",
+    "version": {
+      "value": "1",
+      "changelog": "Initial"
+    },
+    "status": {
+      "value": "active"
+    },
+    "access": {
+      "insert": [
+        "anyone"
+      ],
+      "update": [
+        "anyone"
+      ],
+      "find": [
+        "anyone"
+      ],
+      "delete": [
+        "anyone"
+      ]
+    },
+    "fields": {
+      "_id": {
+        "type": "string",
+        "constraints": {
+          "identity": true
+        }
+      },
+      "bar": {
+        "type": "string"
+      },
+      "objectType": {
+        "type": "string",
+        "access": {
+          "find": [
+            "anyone"
+          ],
+          "update": [
+            "anyone"
+          ]
+        },
+        "constraints": {
+          "minLength": 1,
+          "required": true
+        }
+      }
+    }
+  }
+};
+
+var metadataMissingNameAndVersion = (function() {
+  var m = JSON.parse(JSON.stringify(fooV1));
+  m.entityInfo.name = "";
+  m.schema.name = "";
+  m.schema.version.value = "";
+  return m;
+})();
+
+var mismatchedNameMetadata = (function() {
+  var m = JSON.parse(JSON.stringify(fooV1));
+  m.entityInfo.name = "foo";
+  m.schema.name = "bar";
+  return m;
+})();
