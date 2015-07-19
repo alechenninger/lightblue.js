@@ -405,7 +405,7 @@ describe("LightblueMetadataClient", function() {
   describe("removeEntity", function() {
     it("returns result of DELETE ${host}/${entityName}", function() {
       var result = metadataClient.removeEntity("user");
-      expect(mockHttpClient.request.url).to.match(/^myhost\.com\/foo\/?$/);
+      expect(mockHttpClient.request.url).to.match(/^myhost\.com\/user\/?$/);
       expect(mockHttpClient.request.method).to.equal("delete");
       expect(result).to.equal("response");
     });
