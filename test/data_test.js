@@ -304,7 +304,7 @@ describe("LightblueDataClient", function() {
   });
 
   describe("delete", function() {
-    it("should construct urls like ${host/data/delete/${entity}/${version}", function() {
+    it("should construct urls like ${host}/data/delete/${entity}/${version}", function() {
       dataClient.delete(validDeleteConfig({
         entity: "myEntity",
         version: "1.2.0"
