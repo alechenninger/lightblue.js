@@ -181,23 +181,36 @@ describe("LightblueMetadataClient", function() {
   });
 
   describe("addSchema", function() {
-    it("should construct urls like ${host}/${entityName}/schema=${version} using name and version from entity info");
+    it("returns result of PUT ${host}/${entityName}/schema=${version} using name and version from schema", function() {
+      var result = metadataClient.addSchema(fooV1.schema);
+      expect(mockHttpClient.request.url).to.match(new RegExp("^myhost\.com/foo/schema=1$"));
+      expect(mockHttpClient.request.method).to.equal("put");
+      expect(result).to.equal("response");
+    });
 
-    it("requires entity name and version in schema");
-
-    it("uses PUT");
-
-    it("returns result of httpclient execute");
+    it("requires entity name and version in schema", function() {
+      expect(function() {
+        metadataClient.addSchema(metadataMissingNameAndVersion.schema);
+      }).to.throw(Error);
+      expect(function() {
+        metadataClient.addSchema(metadataMissingVersion.schema);
+      }).to.throw(Error);
+    });
   });
 
   describe("updateEntityInfo", function() {
-    it("constructs urls like ${host}/${entityName} using name from entity info");
+    it("returns result of PUT ${host}/${entityName} using name from entity info", function() {
+      var result = metadataClient.updateEntityInfo(fooV1.entityInfo);
+      expect(mockHttpClient.request.url).to.match(new RegExp("^myhost\.com/foo/?$"));
+      expect(mockHttpClient.request.method).to.equal("put");
+      expect(result).to.equal("response");
+    });
 
-    it("requires entity name in schema");
-
-    it("uses PUT");
-
-    it("returns result of httpclient execute");
+    it("requires entity name in entity info", function() {
+      expect(function() {
+        metadataClient.updateEntityInfo(metadataMissingNameAndVersion.entityInfo);
+      }).to.throw(Error);
+    });
   });
 
   describe("updateSchemaStatus", function() {
@@ -341,6 +354,12 @@ var metadataMissingNameAndVersion = (function() {
   var m = JSON.parse(JSON.stringify(fooV1));
   m.entityInfo.name = "";
   m.schema.name = "";
+  m.schema.version.value = "";
+  return m;
+})();
+
+var metadataMissingVersion = (function() {
+  var m = JSON.parse(JSON.stringify(fooV1));
   m.schema.version.value = "";
   return m;
 })();
