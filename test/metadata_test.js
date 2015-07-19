@@ -124,17 +124,31 @@ describe("LightblueMetadataClient", function() {
   });
 
   describe("getDependencies", function() {
-    it("should construct urls like ${host}/${entityName}/dependencies if entity name but no version is provided");
+    it("returns result of GET ${host}/${entityName}/dependencies if entity name but no version is provided", function() {
+      var result = metadataClient.getDependencies("foo");
+      expect(mockHttpClient.request.url).to.match(new RegExp("^myhost.com/foo/dependencies/?$"));
+      expect(mockHttpClient.request.method).to.equal("get");
+      expect(result).to.equal("response");
+    });
 
-    it("should construct urls like ${host}/${entityName}/${version}/dependencies if both entity name and version are provided");
+    it("returns result of GET ${host}/${entityName}/${version}/dependencies if both entity name and version are provided", function() {
+      var result = metadataClient.getDependencies("foo", "1.2.3");
+      expect(mockHttpClient.request.url).to.match(new RegExp("^myhost.com/foo/1.2.3/dependencies/?$"));
+      expect(mockHttpClient.request.method).to.equal("get");
+      expect(result).to.equal("response");
+    });
 
-    it("should construct urls like ${host}/dependencies if neither entity name or version is provided");
+    it("returns result of GET ${host}/dependencies if neither entity name or version is provided", function() {
+      var result = metadataClient.getDependencies();
+      expect(mockHttpClient.request.url).to.match(new RegExp("^myhost.com/dependencies/?$"));
+      expect(mockHttpClient.request.method).to.equal("get");expect(result).to.equal("response");
+    });
 
-    it("should not allow only passing a version");
-
-    it("should use GET");
-
-    it("should return result of httpclient execute");
+    it("does not allow only passing a version", function() {
+      expect(function () {
+        metadataClient.getDependencies(undefined, "1.2.3");
+      }).to.throw(Error);
+    });
   });
 
   describe("putMetadata", function() {
