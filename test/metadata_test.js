@@ -12,7 +12,11 @@ describe("LightblueMetadataClient", function() {
     }
   };
 
-  var metadataClient = new MetadataClient(mockHttpClient, "myhost.com");
+  var metadataClient;
+
+  beforeEach(function() {
+    metadataClient = new MetadataClient(mockHttpClient, "myhost.com");
+  });
 
   describe("getNames", function() {
     it("should construct urls like ${host}/ when no status is provided", function() {
@@ -214,35 +218,157 @@ describe("LightblueMetadataClient", function() {
   });
 
   describe("updateSchemaStatus", function() {
-    it("constructs urls like ${host}/${entityName}/${version}/${status} when no comment is provided");
+    it("returns result of PUT ${host}/${entityName}/${version}/${status} when no comment is provided", function() {
+      var result = metadataClient.updateSchemaStatus("foo", "1.2.3", "active");
+      expect(mockHttpClient.request.url).to.match(/^myhost\.com\/foo\/1\.2\.3\/active\/?$/);
+      expect(mockHttpClient.request.method).to.equal("put");
+      expect(result).to.equal("response");
+    });
 
-    it("constructs urls like ${host}/${entityName}/${version}/${status}?comment=${url encoded comment} when comment is provided");
+    it("returns result of PUT ${host}/${entityName}/${version}/${status}?comment=${url encoded comment} when comment is provided", function() {
+      var result = metadataClient.updateSchemaStatus("foo", "1.2.3", "active", "this is a comment");
+      expect(mockHttpClient.request.url).to.match(/^myhost\.com\/foo\/1\.2\.3\/active\?comment=this%20is%20a%20comment$/);
+      expect(mockHttpClient.request.method).to.equal("put");
+      expect(result).to.equal("response");
+    });
 
-    it("requires name version and status");
+    it("requires name version and status", function() {
+      expect(function() {
+        metadataClient.updateSchemaStatus("foo", "1.2.3");
+      }).to.throw(Error);
+      expect(function() {
+        metadataClient.updateSchemaStatus(undefined, "1.2.3", "active");
+      }).to.throw(Error);
+      expect(function() {
+        metadataClient.updateSchemaStatus("foo", undefined, "active");
+      }).to.throw(Error);
+    });
 
-    it("requires status to be one of: [active, deprecated, disabled]");
-
-    it("uses PUT");
-
-    it("returns result of httpclient execute");
+    it("requires status to be one of: [active, deprecated, disabled]", function() {
+      expect(function() {
+        metadataClient.updateSchemaStatus("foo", "1.2.3", "badstatus");
+      }).to.throw(Error);
+    });
   });
 
   describe("activateSchema", function() {
-    it("uses PUT");
+    it("returns result of call to updateSchemaStatus with entity name, version, and 'active' status", function() {
+      var _entityName, _version, _status, _commnt;
 
-    it("returns result of httpclient execute");
+      metadataClient.updateSchemaStatus = function(entityName, version, status, comment) {
+        _entityName = entityName;
+        _version = version;
+        _status = status;
+        _comment = comment;
+        return "foobar";
+      };
+
+      var result = metadataClient.activateSchema("foo", "1.2.3");
+      expect(result).to.equal("foobar");
+      expect(_entityName).to.equal("foo");
+      expect(_version).to.equal("1.2.3");
+      expect(_status).to.equal("active");
+      expect(_comment).to.be.undefined;
+    });
+
+    it("returns result of call to updateSchemaStatus with entity name, version, 'active' status, and comment", function() {
+      var _entityName, _version, _status, _comment;
+
+      metadataClient.updateSchemaStatus = function(entityName, version, status, comment) {
+        _entityName = entityName;
+        _version = version;
+        _status = status;
+        _comment = comment;
+        return "foobar";
+      };
+
+      var result = metadataClient.activateSchema("foo", "1.2.3", "this is a comment");
+      expect(result).to.equal("foobar");
+      expect(_entityName).to.equal("foo");
+      expect(_version).to.equal("1.2.3");
+      expect(_status).to.equal("active");
+      expect(_comment).to.equal("this is a comment");
+    });
   });
 
   describe("deprecateSchema", function() {
-    it("uses PUT");
+    it("returns result of call to updateSchemaStatus with entity name, version, and 'deprecated' status", function() {
+      var _entityName, _version, _status, _commnt;
 
-    it("returns result of httpclient execute");
+      metadataClient.updateSchemaStatus = function(entityName, version, status, comment) {
+        _entityName = entityName;
+        _version = version;
+        _status = status;
+        _comment = comment;
+        return "foobar";
+      };
+
+      var result = metadataClient.deprecateSchema("foo", "1.2.3");
+      expect(result).to.equal("foobar");
+      expect(_entityName).to.equal("foo");
+      expect(_version).to.equal("1.2.3");
+      expect(_status).to.equal("deprecated");
+      expect(_comment).to.be.undefined;
+    });
+
+    it("returns result of call to updateSchemaStatus with entity name, version, 'deprecated' status, and comment", function() {
+      var _entityName, _version, _status, _comment;
+
+      metadataClient.updateSchemaStatus = function(entityName, version, status, comment) {
+        _entityName = entityName;
+        _version = version;
+        _status = status;
+        _comment = comment;
+        return "foobar";
+      };
+
+      var result = metadataClient.deprecateSchema("foo", "1.2.3", "this is a comment");
+      expect(result).to.equal("foobar");
+      expect(_entityName).to.equal("foo");
+      expect(_version).to.equal("1.2.3");
+      expect(_status).to.equal("deprecated");
+      expect(_comment).to.equal("this is a comment");
+    });
   });
 
   describe("disableSchema", function() {
-    it("uses PUT");
+    it("returns result of call to updateSchemaStatus with entity name, version, and 'disabled' status", function() {
+      var _entityName, _version, _status, _commnt;
 
-    it("returns result of httpclient execute");
+      metadataClient.updateSchemaStatus = function(entityName, version, status, comment) {
+        _entityName = entityName;
+        _version = version;
+        _status = status;
+        _comment = comment;
+        return "foobar";
+      };
+
+      var result = metadataClient.disableSchema("foo", "1.2.3");
+      expect(result).to.equal("foobar");
+      expect(_entityName).to.equal("foo");
+      expect(_version).to.equal("1.2.3");
+      expect(_status).to.equal("disabled");
+      expect(_comment).to.be.undefined;
+    });
+
+    it("returns result of call to updateSchemaStatus with entity name, version, 'disabled' status, and comment", function() {
+      var _entityName, _version, _status, _comment;
+
+      metadataClient.updateSchemaStatus = function(entityName, version, status, comment) {
+        _entityName = entityName;
+        _version = version;
+        _status = status;
+        _comment = comment;
+        return "foobar";
+      };
+
+      var result = metadataClient.disableSchema("foo", "1.2.3", "this is a comment");
+      expect(result).to.equal("foobar");
+      expect(_entityName).to.equal("foo");
+      expect(_version).to.equal("1.2.3");
+      expect(_status).to.equal("disabled");
+      expect(_comment).to.equal("this is a comment");
+    });
   });
 
   describe("removeDefaultVersion", function() {
