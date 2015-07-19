@@ -372,21 +372,47 @@ describe("LightblueMetadataClient", function() {
   });
 
   describe("removeDefaultVersion", function() {
-    it("returns result of DELETE ${host}/{entityName}/default");
+    it("returns result of DELETE ${host}/{entityName}/default", function() {
+      var result = metadataClient.removeDefaultVersion("foo");
+      expect(mockHttpClient.request.url).to.match(/^myhost\.com\/foo\/default\/?$/);
+      expect(mockHttpClient.request.method).to.equal("delete");
+      expect(result).to.equal("response");
+    });
 
-    it("requires entity name");
+    it("requires entity name", function() {
+      expect(metadataClient.removeDefaultVersion).to.throw(Error);
+    });
   });
 
   describe("setDefaultVersion", function() {
-    it("returns result of POST ${host}/${entityName}/${version}/default");
+    it("returns result of POST ${host}/${entityName}/${version}/default", function() {
+      var result = metadataClient.setDefaultVersion("foo", "2.0.0");
+      expect(mockHttpClient.request.url).to.match(/^myhost\.com\/foo\/2\.0\.0\/default\/?$/);
+      expect(mockHttpClient.request.method).to.equal("post");
+      expect(result).to.equal("response");
+    });
 
-    it("requires entity name and version");
+    it("requires entity name and version", function() {
+      expect(function() {
+        metadataClient.setDefaultVersion("foo");
+      }).to.throw(Error);
+      expect(function() {
+        metadataClient.setDefaultVersion(undefined, "5");
+      }).to.throw(Error);
+    });
   });
 
   describe("removeEntity", function() {
-    it("returns result of DELETE ${host}/${entityName}");
+    it("returns result of DELETE ${host}/${entityName}", function() {
+      var result = metadataClient.removeEntity("user");
+      expect(mockHttpClient.request.url).to.match(/^myhost\.com\/foo\/?$/);
+      expect(mockHttpClient.request.method).to.equal("delete");
+      expect(result).to.equal("response");
+    });
 
-    it("requires entity name");
+    it("requires entity name", function() {
+      expect(metadataClient.removeEntity).to.throw(Error);
+    });
   });
 });
 
