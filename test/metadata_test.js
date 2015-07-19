@@ -372,33 +372,21 @@ describe("LightblueMetadataClient", function() {
   });
 
   describe("removeDefaultVersion", function() {
-    it("constructs urls like ${host}/{entityName}/default");
+    it("returns result of DELETE ${host}/{entityName}/default");
 
     it("requires entity name");
-
-    it("uses DELETE");
-
-    it("returns result of httpclient execute");
   });
 
   describe("setDefaultVersion", function() {
-    it("constructs urls like ${host}/${entityName}/${version}/default");
+    it("returns result of POST ${host}/${entityName}/${version}/default");
 
     it("requires entity name and version");
-
-    it("uses POST");
-
-    it("returns result of httpclient execute");
   });
 
   describe("removeEntity", function() {
-    it("constructs urls like ${host}/${entityName}");
+    it("returns result of DELETE ${host}/${entityName}");
 
     it("requires entity name");
-
-    it("uses DELETE");
-
-    it("returns result of httpclient execute");
   });
 });
 
