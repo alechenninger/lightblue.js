@@ -5,6 +5,11 @@ var expect = require("chai").expect;
 describe("nglightblue", function() {
   var testModule;
 
+  it("doesn't get mad if angular is not loaded", function() {
+    require("../lib/nglightblue.js");
+    // If require does not fail, we're good
+  });
+
   describe("with angular frontend", function() {
     beforeEach("setup browser environment", function(done) {
       benv.setup(function() {
@@ -29,7 +34,7 @@ describe("nglightblue", function() {
         expect(lightblueProvider).not.to.be.null;
         done();
       }]);
-      
+
       angular.bootstrap(document, ["test"]);
     });
 
@@ -51,10 +56,5 @@ describe("nglightblue", function() {
 
       angular.bootstrap(document, ["test"]);
     });
-  });
-
-  it("doesn't get mad if angular is not loaded", function() {
-    require("../lib/nglightblue.js");
-    // If require does not fail, we're good
   });
 });
