@@ -62,7 +62,7 @@ trivial. See [issue #11](https://github.com/alechenninger/lightblue.js/issues/11
 
 ### AngularJS
 If angular is detected, a "lightblue" module will be registered with a
-"lightblue" service as the a namespace for lightblue facilities. In this
+"lightblue" service as a namespace for lightblue facilities. In this
 environment, Angular's `$http` service will be used instead of making XHR
 requests directly. You can configure the host(s) to use using providers.
 
