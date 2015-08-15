@@ -2,8 +2,8 @@
 [![Build Status](https://travis-ci.org/alechenninger/lightblue.js.svg?branch=master)](https://travis-ci.org/alechenninger/lightblue.js)
 [![Coverage Status](https://coveralls.io/repos/alechenninger/lightblue.js/badge.svg)](https://coveralls.io/r/alechenninger/lightblue.js)
 
-A [lightblue](https://github.com/lightblue-platform) client written in
-Javascript for frontend or Node.JS applications.
+A [lightblue](http://lightblue.io) client written in Javascript for frontend or
+Node.JS applications.
 
 The same library may be used for servers or clients, with [special support for
 AngularJS applications](#angularjs).
