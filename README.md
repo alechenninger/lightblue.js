@@ -60,7 +60,7 @@ field("lastName").equalTo(field("firstName"));
 The query builder API is not yet fully flushed out, but adding functionality is
 trivial. See [issue #11](https://github.com/alechenninger/lightblue.js/issues/11).
 
-## Example find request
+### Example find request
 
 ```javascript
 // Query
