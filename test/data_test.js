@@ -3,7 +3,7 @@ var expect = require("chai").expect;
 var DataClient = require("../lib/data.js");
 
 describe("LightblueDataClient", function() {
-  
+
   // Captures request sent to execute(req)
   var mockHttpClient = {
     execute: function(request) {
@@ -11,9 +11,9 @@ describe("LightblueDataClient", function() {
       return "response";
     }
   };
-  
+
   var dataClient = new DataClient(mockHttpClient, "myhost.com");
-  
+
   describe("find", function() {
     it("should construct urls like ${host}/find/${entity}/${version}", function() {
       dataClient.find(validFindConfig({
@@ -66,7 +66,7 @@ describe("LightblueDataClient", function() {
       };
 
       dataClient.find(config);
-      
+
       expect(mockHttpClient.request.body).to.deep.equal(expectedBody);
     });
 
@@ -90,7 +90,7 @@ describe("LightblueDataClient", function() {
       };
 
       dataClient.find(config);
-      
+
       expect(mockHttpClient.request.body).to.deep.equal(expectedBody);
     });
 
@@ -102,10 +102,10 @@ describe("LightblueDataClient", function() {
       expect(mockHttpClient.request.body.range[0]).to.equal(1);
       expect(mockHttpClient.request.body.range[1]).to.equal(10);
     });
-    
+
     it("should return result of http client execute", function() {
       var response = dataClient.find(validFindConfig());
-      
+
       expect(response).to.equal("response");
     });
   });
@@ -165,10 +165,10 @@ describe("LightblueDataClient", function() {
 
       expect(mockHttpClient.request.body).to.deep.equal(expectedBody);
     });
-    
+
     it("should return result of http client execute", function() {
       var response = dataClient.insert(validInsertConfig());
-      
+
       expect(response).to.equal("response");
     });
   });
@@ -230,10 +230,10 @@ describe("LightblueDataClient", function() {
 
       expect(mockHttpClient.request.body).to.deep.equal(expectedBody);
     });
-    
+
     it("should return result of http client execute", function() {
       var response = dataClient.update(validUpdateConfig());
-      
+
       expect(response).to.equal("response");
     });
   });
@@ -295,10 +295,10 @@ describe("LightblueDataClient", function() {
 
       expect(mockHttpClient.request.body).to.deep.equal(expectedBody);
     });
-    
+
     it("should return result of http client execute", function() {
       var response = dataClient.save(validSaveConfig());
-      
+
       expect(response).to.equal("response");
     });
   });
@@ -356,10 +356,10 @@ describe("LightblueDataClient", function() {
 
       expect(mockHttpClient.request.body).to.deep.equal(expectedBody);
     });
-    
+
     it("should return result of http client execute", function() {
       var response = dataClient.delete(validDeleteConfig());
-      
+
       expect(response).to.equal("response");
     });
   });
@@ -371,7 +371,7 @@ function validFindConfig(edit) {
   var config = {
     entity: ifDefined(edit.entity, "user"),
     version: ifDefined(edit.version, "1.0"),
-    query: ifDefined(edit.query, { field: "name", op: "$eq", "rvalue": "Bob" }),
+    query: ifDefined(edit.query, { field: "name", op: "$eq", rvalue: "Bob" }),
     projection: ifDefined(edit.projection, { include: "*" })
   };
 
@@ -405,7 +405,7 @@ function validUpdateConfig(edit) {
   return {
     entity: ifDefined(edit.entity, "user"),
     version: ifDefined(edit.version, "1.0"),
-    query: ifDefined(edit.query, { field: "name", op: "$eq", "rvalue": "Bob" }),
+    query: ifDefined(edit.query, { field: "name", op: "$eq", rvalue: "Bob" }),
     update: ifDefined(edit.update, {
       $set: {
         name: "Jim"
@@ -435,7 +435,7 @@ function validDeleteConfig(edit) {
   return {
     entity: ifDefined(edit.entity, "user"),
     version: ifDefined(edit.version, "1.0"),
-    query: ifDefined(edit.query, { field: "name", op: "$eq", "rvalue": "Bob" })
+    query: ifDefined(edit.query, { field: "name", op: "$eq", rvalue: "Bob" })
   };
 }
 
