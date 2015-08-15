@@ -65,7 +65,7 @@ trivial. See [issue #11](https://github.com/alechenninger/lightblue.js/issues/11
 ```javascript
 // Query
 var bobsOlderThan20 = field("firstName").equalTo("bob")
-    .and(field("age").greaterThan(20)));
+    .and(field("age").greaterThan(20));
 
 // Projection
 // No projection builder yet but it would be something like this:
