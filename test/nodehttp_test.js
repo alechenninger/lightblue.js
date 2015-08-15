@@ -3,6 +3,8 @@ var NodeHttpClient = require("../lib/nodehttp.js");
 var HttpRequest = require("../lib/http.js").HttpRequest;
 var nock = require("nock");
 var expect = require("chai").expect;
+var http = require("http");
+var https = require("https");
 
 describe("NodeHttpClient", function() {
   var client;
@@ -58,5 +60,57 @@ describe("NodeHttpClient", function() {
         expect(response).to.equal("it works");
         done();
       });
+  });
+
+  describe("with agent configured", function () {
+    var realHttpRequest = http.request;
+    var realHttpsRequest = https.request;
+
+    var fakeHttpAgent = "fakeHttpAgent";
+    var fakeHttpsAgent = "fakeHttpsAgent";
+
+    var client = new NodeHttpClient({
+      httpAgent: fakeHttpAgent,
+      httpsAgent: fakeHttpsAgent
+    });
+
+    afterEach(function resetModsToNodeModules() {
+      http.request = realHttpRequest;
+      https.request = realHttpsRequest;
+    });
+
+    it("uses http agent configuration for http calls", function() {
+      var agentUsed;
+
+      http.request = function(opts) {
+        agentUsed = opts.agent;
+        return {
+          on: function() {},
+          write: function() {},
+          end: function() {}
+        };
+      };
+
+      client.execute(new HttpRequest("get", "http://foo.com"));
+
+      expect(agentUsed).to.equal(fakeHttpAgent);
+    });
+
+    it("uses https agent configuration for https calls", function() {
+      var agentUsed;
+
+      https.request = function(opts) {
+        agentUsed = opts.agent;
+        return {
+          on: function() {},
+          write: function() {},
+          end: function() {}
+        };
+      };
+
+      client.execute(new HttpRequest("get", "https://foo.com"));
+
+      expect(agentUsed).to.equal(fakeHttpsAgent);
+    });
   });
 });
