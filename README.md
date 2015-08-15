@@ -13,7 +13,6 @@ Javascript for frontend or Node.JS applications.
 
 `git clone https://github.com/alechenninger/lightblue.js.git`
 
-
 ## Imports
 
 ### Vanilla.js
@@ -38,14 +37,16 @@ require(["lightblue"], function(lightblue) {
 Once you have a `lightblue` object, you can get a client:
 
 ```js
-// Assumes /data and /metadata for data and metadata services respectively, 
+// Assumes /data and /metadata for data and metadata services respectively,
 // but you can override.
-var client = lightblue.getClient("http://my.lightblue.host.com/rest"); 
+var client = lightblue.getClient("http://my.lightblue.host.com/rest");
 ```
 
 ### AngularJS
 If angular is detected, a "lightblue" module will be registered with a
-"lightblue" service as the client.
+"lightblue" service as the a namespace for lightblue facilities. In this
+environment, Angular's $http service will be used instead of making XHR requests
+directly. You can configure the host(s) to use using providers.
 
 ```js
 var app = angular.module("app", ["lightblue"]);
@@ -54,21 +55,20 @@ app.config(["lightblueProvider", function(lightblueProvider) {
   lightblueProvider.setHost("http://my.lightblue.com");
 }]);
 
-app.controller("ctrl", ["lightblue", function(lightblueClient) {
-  lightblueClient.data.find(...)
-      .then(...);
+app.controller("ctrl", ["lightblue", function(lightblue) {
+  var field = lightblue.query.field;
+
+  lightblue.data.find(field("foo").equalTo("bar"))
+      .then(function(response) {
+        var entity = response.processed[0];
+      });
 }]);
 ```
-
-**At the moment you will also need to use the global "lightblue" namespace if 
-you want query builder API. So don't name your client variable `lightblue` 
-just yet. See 
-[issue #9](https://github.com/alechenninger/lightblue.js/issues/9).**
 
 ## Construct a find request
 
 ```javascript
-var field = lightblue.field;
+var field = lightblue.query.field;
 
 var find = client.data.find({
   entity: "User",
