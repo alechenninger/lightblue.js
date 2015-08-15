@@ -60,6 +60,26 @@ field("lastName").equalTo(field("firstName"));
 The query builder API is not yet fully flushed out, but adding functionality is
 trivial. See [issue #11](https://github.com/alechenninger/lightblue.js/issues/11).
 
+## Example find request
+
+```javascript
+// Query
+var bobsOlderThan20 = field("firstName").equalTo("bob")
+    .and(field("age").greaterThan(20)));
+
+// Projection
+// No projection builder yet but it would be something like this:
+var everything = include("*").recursively();
+
+var find = client.data.find({
+  entity: "User",
+  version: "1.0.0",
+  query: bobsOlderThan20,
+  projection: everything
+})
+.then(console.log.bind(console));
+```
+
 ### AngularJS
 If angular is detected, a "lightblue" module will be registered with a
 "lightblue" service as a namespace for lightblue facilities. In this
@@ -102,22 +122,4 @@ myModule.factory("otherLightblueInstance", function() {
     metadata: client.data
   };
 });
-```
-
-## Construct a find request
-
-```javascript
-var field = lightblue.query.field;
-
-var find = client.data.find({
-  entity: "User",
-  version: "1.0.0",
-  // Query builder, or just pass a query JSON literal
-  query: field("username").equalTo("bob")
-    .or(field("firstName").equalTo(field("username"))
-      .and(field("age").greaterThan(4))),
-  // No projection builder yet but it would be something like this:
-  projection: include("*").recursively()feist
-})
-.then(console.log.bind(console));
 ```
