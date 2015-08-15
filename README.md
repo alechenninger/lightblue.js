@@ -119,7 +119,7 @@ myModule.factory("otherLightblueInstance", function() {
   var client = lightblue.getClient("my.other.lightblue.com");
   return {
     data: client.data,
-    metadata: client.data
+    metadata: client.metadata
   };
 });
 ```
