@@ -113,13 +113,41 @@ services for your needs. **Don't use the global namespace directly: wrap it in a
 service.**
 
 ```js
-myModule.factory("otherLightblueInstance", function() {
+myModule.factory("otherLightblueInstance", ["$http", function() {
   // `lightblue` is globally defined on `window` if needed.
   // Don't use it directly: wrap it in a service.
-  var client = lightblue.getClient("my.other.lightblue.com");
+  // Pass $http in via config object unless you want the client to use XHR
+  // directly.
+  var client = lightblue.getClient("my.other.lightblue.com" {$http: $http});
   return {
     data: client.data,
     metadata: client.metadata
   };
 });
 ```
+
+### Auth
+
+#### Basic
+```js
+lightblue.getClient("foo.com", {auth: {username: "foo", password: "bar"}});
+```
+
+#### Basic w/ Angular service
+TBD
+
+#### SSL certs (client)
+This is handled by the user's browser, each in their own way. You will generally
+have to import your cert into the browser and select it once you visit the web
+application. The Javascript has no idea certs are involved. See each browser's
+documentation for more details.
+
+#### SSL certs (server)
+In the `options` object for the clients, you may define an "httpsAgent" key
+which has the same semantics as making an https request with node and defining
+an agent to use. If you pass `undefined`, it uses the global agent. Or, you may
+pass your own (via `new https.Agent(options)`). In either case, you will need to
+configure your certificates on the agent. See [nodejs's https documentation][1]
+for more information.
+
+[1]: https://nodejs.org/api/https.html#https_https_request_options_callback
