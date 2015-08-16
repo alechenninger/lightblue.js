@@ -12,7 +12,8 @@
     "bundle": "browserify lib/lightblue.js --standalone lightblue -d -p [minifyify --map lightblue.map.json --output dist/lightblue.map.json] > dist/lightblue.min.js",
     "test": "istanbul cover _mocha -- -R spec",
     "coveralls": "istanbul cover _mocha && istanbul-coveralls",
-    "tdd": "mocha -w"
+    "tdd": "mocha -w",
+    "changelog": "github_changelog_generator"
   },
   "dependencies": {
     "q": "^1.4.1"
