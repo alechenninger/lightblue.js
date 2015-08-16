@@ -39,4 +39,26 @@ describe("NgHttpClient", function() {
 
     expect(authorizationHeader).to.equal("Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==");
   });
+
+  it("allows setting auth after construction", function() {
+    var authorizationHeader;
+
+    mock$Http = function(config) {
+      authorizationHeader = config.headers.Authorization;
+    };
+
+    var ngHttp = new NgHttpClient(mock$Http, {
+      username: "foo",
+      password: "bar"
+    });
+
+    ngHttp.setAuth({
+      username: "Aladdin",
+      password: "open sesame"
+    });
+    
+    ngHttp.execute(new HttpRequest("get", "http://foo"));
+
+    expect(authorizationHeader).to.equal("Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==");
+  });
 });
