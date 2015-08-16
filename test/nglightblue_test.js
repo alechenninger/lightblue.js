@@ -45,7 +45,7 @@ describe("nglightblue", function() {
         }
       };
 
-      testModule.value("lightblue.nghttpclient", mockNgHttpClient);
+      testModule.value("lightblue.http", mockNgHttpClient);
 
       testModule.run(["lightblue", function(lightblue) {
         lightblue.data.find({

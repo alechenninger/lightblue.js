@@ -128,13 +128,23 @@ myModule.factory("otherLightblueInstance", ["$http", function() {
 
 ### Auth
 
-#### Basic
+#### Basic using `lightblue` object
 ```js
 lightblue.getClient("foo.com", {auth: {username: "foo", password: "bar"}});
 ```
 
 #### Basic w/ Angular service
-TBD
+```js
+// Inject lightblue.http...
+module.controller("login", ["lightblue.http", function(lightblueHttp) {
+  $scope.login = function() {
+    lightblueHttp.setAuth({
+      username: $scope.username,
+      password: $scope.password
+    });
+  };
+}]);
+```
 
 #### SSL certs (client)
 This is handled by the user's browser, each in their own way. You will generally
@@ -151,3 +161,23 @@ configure your certificates on the agent. See [nodejs's https documentation][1]
 for more information.
 
 [1]: https://nodejs.org/api/https.html#https_https_request_options_callback
+
+```js
+// Configure the global agent
+var fs = require("fs");
+var https = require("https");
+
+https.globalAgent.key = fs.readFileSync('my-key.pem');
+https.globalAgent.cert = fs.readFileSync('my-cert.pem');
+
+// Defaults to global agent
+var clientUsingGlobalAgent = lightblue.getClient("https://my.lightblue.com");
+
+// Use a lightblue-specific agent
+var clientUsingOwnAgent = lightblue.getClient("https://my.lightblue.com", {
+  httpsAgent: new https.Agent({
+    key: fs.readFileSync('my-key.pem'),
+    cert: fs.readFileSync('my-cert.pem')
+  })
+});
+```
