@@ -1,7 +1,7 @@
 {
   "name": "lightblue.js",
-  "version": "0.6.1-alpha",
-  "description": "A lightblue client for javascript.",
+  "version": "0.7.0",
+  "description": "A lightblue client for JavaScript.",
   "license": "GPL-3.0",
   "repository": {
     "type": "git",
