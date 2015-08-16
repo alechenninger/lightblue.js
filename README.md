@@ -2,7 +2,7 @@
 [![Build Status](https://travis-ci.org/alechenninger/lightblue.js.svg?branch=master)](https://travis-ci.org/alechenninger/lightblue.js)
 [![Coverage Status](https://coveralls.io/repos/alechenninger/lightblue.js/badge.svg)](https://coveralls.io/r/alechenninger/lightblue.js)
 
-A [lightblue](http://lightblue.io) client written in Javascript for frontend or
+A [lightblue](http://lightblue.io) client written in JavaScript for frontend or
 Node.JS applications.
 
 The same library may be used for servers or clients, with [special support for
@@ -149,13 +149,13 @@ module.controller("login", ["lightblue.http", function(lightblueHttp) {
 ```
 
 And of course if needed you can still use the global `lightblue` object as above
-to get a new client with basic auth credentials, just remember to pass `$http` 
+to get a new client with basic auth credentials, just remember to pass `$http`
 as per [above example](#multiple-lightblue-service-instances-with-angular).
 
 #### SSL certs (client)
 This is handled by the user's browser, each in their own way. You will generally
 have to import your cert into the browser and select it once you visit the web
-application. The Javascript has no idea certs are involved. See each browser's
+application. The JavaScript has no idea certs are involved. See each browser's
 documentation for more details.
 
 #### SSL certs (server)
