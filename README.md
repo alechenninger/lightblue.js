@@ -128,12 +128,14 @@ myModule.factory("otherLightblueInstance", ["$http", function() {
 
 ### Auth
 
-#### Basic using `lightblue` object
+#### Basic using `lightblue` object (client or server)
 ```js
 lightblue.getClient("foo.com", {auth: {username: "foo", password: "bar"}});
 ```
 
-#### Basic w/ Angular service
+#### Basic w/ Angular service (client)
+Since lightblue.js uses `$http`, you can add interceptors / common headers to all `$http` requests if that works for you. You can also configure the lightblue clients directly:
+
 ```js
 // Inject lightblue.http...
 module.controller("login", ["lightblue.http", function(lightblueHttp) {
@@ -145,6 +147,10 @@ module.controller("login", ["lightblue.http", function(lightblueHttp) {
   };
 }]);
 ```
+
+And of course if needed you can still use the global `lightblue` object as above
+to get a new client with basic auth credentials, just remember to pass `$http` 
+as per [above example](#multiple-lightblue-service-instances-with-angular).
 
 #### SSL certs (client)
 This is handled by the user's browser, each in their own way. You will generally
