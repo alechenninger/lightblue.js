@@ -123,7 +123,7 @@ myModule.factory("otherLightblueInstance", ["$http", function() {
     data: client.data,
     metadata: client.metadata
   };
-});
+}]);
 ```
 
 ### Auth
