@@ -253,7 +253,7 @@ describe("LightblueMetadataClient", function() {
 
   describe("activateSchema", function() {
     it("returns result of call to updateSchemaStatus with entity name, version, and 'active' status", function() {
-      var _entityName, _version, _status, _commnt;
+      var _entityName, _version, _status, _comment;
 
       metadataClient.updateSchemaStatus = function(entityName, version, status, comment) {
         _entityName = entityName;
@@ -293,7 +293,7 @@ describe("LightblueMetadataClient", function() {
 
   describe("deprecateSchema", function() {
     it("returns result of call to updateSchemaStatus with entity name, version, and 'deprecated' status", function() {
-      var _entityName, _version, _status, _commnt;
+      var _entityName, _version, _status, _comment;
 
       metadataClient.updateSchemaStatus = function(entityName, version, status, comment) {
         _entityName = entityName;
@@ -333,7 +333,7 @@ describe("LightblueMetadataClient", function() {
 
   describe("disableSchema", function() {
     it("returns result of call to updateSchemaStatus with entity name, version, and 'disabled' status", function() {
-      var _entityName, _version, _status, _commnt;
+      var _entityName, _version, _status, _comment;
 
       metadataClient.updateSchemaStatus = function(entityName, version, status, comment) {
         _entityName = entityName;
