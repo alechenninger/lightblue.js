@@ -118,11 +118,7 @@ myModule.factory("otherLightblueInstance", ["$http", function() {
   // Don't use it directly: wrap it in a service.
   // Pass $http in via config object unless you want the client to use XHR
   // directly.
-  var client = lightblue.getClient("my.other.lightblue.com" {$http: $http});
-  return {
-    data: client.data,
-    metadata: client.metadata
-  };
+  return lightblue.getClient("my.other.lightblue.com", {$http: $http});
 }]);
 ```
 
