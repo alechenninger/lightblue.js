@@ -19,7 +19,7 @@
     "q": "^1.4.1"
   },
   "devDependencies": {
-    "angular": "^1.4.2",
+    "angular": "1.4.2",
     "benv": "^1.1.0",
     "browserify": "^10.2.6",
     "chai": "<3.0.0",
